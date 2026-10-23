@@ -23,7 +23,7 @@ def upgrade() -> None:
         sa.Column('email', sa.String(length=255), nullable=False),
         sa.Column('hashed_password', sa.String(length=255), nullable=False),
         sa.Column('full_name', sa.String(length=255), nullable=False),
-        sa.Column('is_active', sa.Boolean(), nullable=False, server_default=sa.text('1')),
+        sa.Column('is_active', sa.Boolean(), nullable=False, server_default=sa.text('true')),
         sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
         sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False),
         sa.PrimaryKeyConstraint('id')
@@ -48,7 +48,7 @@ def upgrade() -> None:
         sa.Column('monthly_loan_repayment', sa.Float(), nullable=False, server_default='0.0'),
         sa.Column('expected_growth_rate', sa.Float(), nullable=False, server_default='15.0'),
         sa.Column('financial_goals', sa.Text(), nullable=False, server_default=''),
-        sa.Column('onboarding_completed', sa.Boolean(), nullable=False, server_default='0'),
+        sa.Column('onboarding_completed', sa.Boolean(), nullable=False, server_default=sa.text('false')),
         sa.Column('owner_id', sa.String(length=36), nullable=False),
         sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
         sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False),

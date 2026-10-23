@@ -33,6 +33,11 @@ class Settings(BaseSettings):
     @field_validator("DATABASE_URL", mode="after")
     @classmethod
     def resolve_database_url(cls, v: str) -> str:
+        if not v:
+            return f"sqlite:///{(BACKEND_DIR / 'accora_core.db').as_posix()}"
+        # Normalize legacy postgres:// to postgresql:// for SQLAlchemy/psycopg2
+        if v.startswith("postgres://"):
+            v = v.replace("postgres://", "postgresql://", 1)
         if v.startswith("sqlite:///./") or v.startswith("sqlite:///.\\"):
             db_filename = v.replace("sqlite:///./", "").replace("sqlite:///.\\", "")
             return f"sqlite:///{(BACKEND_DIR / db_filename).as_posix()}"
@@ -42,6 +47,8 @@ class Settings(BaseSettings):
     @classmethod
     def assemble_cors_origins(cls, v: Union[str, List[str]]) -> List[str]:
         if isinstance(v, str):
+            if v.strip() == "*":
+                return ["*"]
             return [i.strip() for i in v.split(",") if i.strip()]
         elif isinstance(v, list):
             return v

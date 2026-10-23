@@ -2,14 +2,21 @@ from sqlalchemy import create_engine, event
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
 from app.core.config import settings
 
-connect_args = {}
+engine_kwargs = {"echo": False}
 if settings.DATABASE_URL.startswith("sqlite"):
-    connect_args = {"check_same_thread": False}
+    engine_kwargs["connect_args"] = {"check_same_thread": False}
+else:
+    # Serverless PostgreSQL pool configuration:
+    # pool_pre_ping verifies connections before query execution (vital for Neon scale-to-zero)
+    # pool_recycle refreshes connections every 5 minutes to avoid stale connection dropouts
+    engine_kwargs["pool_pre_ping"] = True
+    engine_kwargs["pool_recycle"] = 300
+    engine_kwargs["pool_size"] = 5
+    engine_kwargs["max_overflow"] = 10
 
 engine = create_engine(
     settings.DATABASE_URL,
-    connect_args=connect_args,
-    echo=settings.DEBUG and False,
+    **engine_kwargs,
 )
 
 # Enable Foreign Keys and WAL mode for SQLite

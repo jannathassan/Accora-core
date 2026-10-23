@@ -25,7 +25,7 @@ def upgrade() -> None:
         sa.Column('title', sa.String(length=255), nullable=False),
         sa.Column('message', sa.Text(), nullable=False),
         sa.Column('severity', sa.String(length=20), nullable=False, server_default='medium'),
-        sa.Column('read', sa.Boolean(), nullable=False, server_default='0'),
+        sa.Column('read', sa.Boolean(), nullable=False, server_default=sa.text('false')),
         sa.Column('action_url', sa.String(length=255), nullable=False, server_default=''),
         sa.Column('related_id', sa.String(length=255), nullable=False, server_default=''),
         sa.Column('fingerprint', sa.String(length=255), nullable=False, server_default=''),
@@ -49,10 +49,10 @@ def upgrade() -> None:
         batch_op.add_column(sa.Column('tax_rate', sa.Float(), nullable=False, server_default='0.0'))
         batch_op.add_column(sa.Column('date_format', sa.String(length=50), nullable=False, server_default='MMM DD, YYYY'))
         batch_op.add_column(sa.Column('default_view', sa.String(length=50), nullable=False, server_default='dashboard'))
-        batch_op.add_column(sa.Column('proactive_insights', sa.Boolean(), nullable=False, server_default='1'))
+        batch_op.add_column(sa.Column('proactive_insights', sa.Boolean(), nullable=False, server_default=sa.text('true')))
         batch_op.add_column(sa.Column('risk_tolerance', sa.String(length=50), nullable=False, server_default='moderate'))
         batch_op.add_column(sa.Column('forecast_horizon_months', sa.Integer(), nullable=False, server_default='3'))
-        batch_op.add_column(sa.Column('email_alerts', sa.Boolean(), nullable=False, server_default='1'))
+        batch_op.add_column(sa.Column('email_alerts', sa.Boolean(), nullable=False, server_default=sa.text('true')))
 
 
 def downgrade() -> None:

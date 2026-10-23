@@ -1,0 +1,9 @@
+{
+  "name": "accora-core",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Accora Core - Production AI Financial Copilot",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build"
+  }
+}
